@@ -1,6 +1,7 @@
 import SwiftUI
 import Feature
 import Feature2
+import FeatureUntested
 
 @main
 struct TuistTestIssueApp: App {
@@ -10,6 +11,7 @@ struct TuistTestIssueApp: App {
                 Text("Main app")
                 ContentView()
                 Content2View()
+                ContentViewUntested()
             }
             .padding(10)
             .background(Color.gray)

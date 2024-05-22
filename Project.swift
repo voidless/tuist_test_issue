@@ -18,6 +18,20 @@ let project = Project(
             dependencies: [
                 .target(name: "Feature"),
                 .target(name: "Feature2"),
+                .target(name: "FeatureUntested"),
+            ]
+        ),
+        // UI Tests
+        .target(
+            name: "TuistTestIssueAppUITests",
+            destinations: .iOS,
+            product: .uiTests,
+            bundleId: "io.tuist.TuistTestIssueAppUITests",
+            sources: ["TuistTestIssueAppUITests/**"],
+            resources: [],
+            dependencies: [
+                .target(name: "TuistTestIssueApp"),
+                .target(name: "FeatureUITestHelpers"),
             ]
         ),
         // Feature
@@ -72,6 +86,24 @@ let project = Project(
             sources: ["Feature2/DemoApp/**"],
             dependencies: [.target(name: "Feature2")]
         ),
+        // FeatureUntested
+        .target(
+            name: "FeatureUntested",
+            destinations: .iOS,
+            product: .staticFramework,
+            bundleId: "io.tuist.FeatureUntested",
+            sources: ["FeatureUntested/Sources/**"],
+            dependencies: []
+        ),
+        // FeatureUITestHelpers
+        .target(
+            name: "FeatureUITestHelpers",
+            destinations: .iOS,
+            product: .staticFramework,
+            bundleId: "io.tuist.FeatureUITestHelpers",
+            sources: ["FeatureUITestHelpers/Sources/**"],
+            dependencies: []
+        ),
         // Aggregate targets
         .target(
             name: "Swiftlint",
@@ -82,7 +114,7 @@ let project = Project(
             scripts: [
                 .pre(
                     script: """
-                    // swiftlint --progressx
+                    // swiftlint --progress
                     echo "Project.swift:1:1: error: swiftlint failed"
                     exit 1
                     """,
@@ -108,61 +140,6 @@ let project = Project(
                     basedOnDependencyAnalysis: false
                 )
             ]
-        ),
-    ],
-    schemes: [
-        .scheme(
-            name: "TuistTestIssueApp",
-            buildAction: .buildAction(targets: [.target("TuistTestIssueApp")]),
-            testAction: .targets([
-                .testableTarget(target: .target("FeatureTests")),
-                .testableTarget(target: .target("Feature2Tests")),
-            ]),
-            runAction: .runAction(executable: .target("TuistTestIssueApp"))
-        ),
-        .scheme(
-            name: "Feature",
-            buildAction: .buildAction(targets: [.target("Feature")]),
-            testAction: .targets([
-                .testableTarget(target: .target("FeatureTests")),
-            ])
-        ),
-        .scheme(
-            name: "Feature2",
-            buildAction: .buildAction(targets: [.target("Feature2")]),
-            testAction: .targets([
-                .testableTarget(target: .target("Feature2Tests")),
-            ])
-        ),
-        .scheme(
-            name: "FeatureTests",
-            buildAction: .buildAction(targets: [.target("FeatureTests")]),
-            testAction: .targets([
-                .testableTarget(target: .target("FeatureTests")),
-            ])
-        ),
-        .scheme(
-            name: "Feature2Tests",
-            buildAction: .buildAction(targets: [.target("Feature2Tests")]),
-            testAction: .targets([
-                .testableTarget(target: .target("Feature2Tests")),
-            ])
-        ),
-        .scheme(
-            name: "FeatureDemoApp",
-            buildAction: .buildAction(targets: [.target("FeatureDemoApp")]),
-            testAction: .targets([
-                .testableTarget(target: .target("FeatureTests")),
-            ]),
-            runAction: .runAction(executable: .target("FeatureDemoApp"))
-        ),
-        .scheme(
-            name: "Feature2DemoApp",
-            buildAction: .buildAction(targets: [.target("Feature2DemoApp")]),
-            testAction: .targets([
-                .testableTarget(target: .target("Feature2Tests")),
-            ]),
-            runAction: .runAction(executable: .target("Feature2DemoApp"))
         ),
     ]
 )
